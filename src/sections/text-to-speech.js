@@ -12,12 +12,9 @@ import {
 import React from 'react'
 import DropDownMenu from 'components/drop-down-menu'
 import * as auth from 'utils/auth-provider'
-import {client} from 'utils/api-client'
 import {useAuth} from 'context/auth-context'
 import * as colors from 'styles/colors'
 import theSrc from 'assets/hello_ibm.wav'
-
-const authToken = process.env.REACT_APP_AUTH_TOKEN
 
 const styles = {
   textToSpeech: {
@@ -86,31 +83,21 @@ function TextToSpeechForm({onSubmit}) {
   )
 }
 
-const TextToSpeech = () => {
-  const [audioSource, setAudioSource] = React.useState(null)
+const TextToSpeech = ({handleSubmit, audioSource, flag}) => {
   const audioRef = React.useRef()
 
   React.useEffect(() => {
-    if (audioSource)
+    console.log('fire effect')
+    if (audioSource) {
+      console.log('effect ad=udio source')
       if (audioRef.current) {
         // audioRef.current.pause()
         audioRef.current.load()
         audioRef.current.play()
       }
-  }, [audioSource])
-
-  function handleSubmit(text) {
-    client('synthesize', {
-      data: {text},
-      token: authToken,
-      headers: {Accept: 'audio/wav'},
-    })
-      .then(blob => {
-        const url = URL.createObjectURL(blob)
-        setAudioSource(url)
-      })
-      .catch(err => console.log(err))
-  }
+    }
+    // return () => (audioRef.current = null)
+  }, [audioSource, flag])
 
   return (
     <section css={styles.textToSpeech}>

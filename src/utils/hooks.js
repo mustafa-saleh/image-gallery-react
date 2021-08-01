@@ -82,4 +82,22 @@ function useAsync(initialState) {
   }
 }
 
+function getLocalKey(localStorageKey) {
+  return window.localStorage.getItem(localStorageKey)
+}
+
+function setLocalKey(localStorageKey, localStorageValue) {
+  window.localStorage.setItem(localStorageKey, localStorageValue)
+  return localStorageValue
+}
+
+function removeLocalKey(localStorageKey) {
+  window.localStorage.removeItem(localStorageKey)
+}
+
+function useLocalStorage(key) {
+  const keyValue = getLocalKey(key)
+  if (keyValue) return keyValue
+}
+
 export {useAsync}
