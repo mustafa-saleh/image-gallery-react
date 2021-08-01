@@ -5,6 +5,7 @@ import React from 'react'
 import History from 'sections/history'
 import TextToSpeech from 'sections/text-to-speech'
 import {client} from 'utils/api-client'
+import * as mq from 'styles/media-queries'
 
 const authToken = process.env.REACT_APP_AUTH_TOKEN
 const textToSpeechKey = '__ibm_text_to_speech__'
@@ -14,6 +15,13 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: '1fr 2fr',
     gridGap: '0.75rem',
+    [mq.small]: {
+      gridTemplateColumns: '1fr',
+      gridRowGap: '3em',
+      '#history-section': {
+        order: 2,
+      },
+    },
   },
 }
 
@@ -21,6 +29,7 @@ const Main = () => {
   const [audioSource, setAudioSource] = React.useState(null)
   const [historyText, setHistoryText] = React.useState('')
   const [flag, setFlag] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
 
   function handleSubmit(text) {
     const localValue = JSON.parse(window.localStorage.getItem(textToSpeechKey))
@@ -30,12 +39,14 @@ const Main = () => {
       setAudioSource(localValue[text])
       setFlag(!flag)
     } else {
+      setLoading(true)
       client('synthesize', {
         data: {text},
         token: authToken,
         headers: {Accept: 'audio/wav'},
       })
         .then(blob => {
+          setLoading(false)
           const reader = new FileReader()
           reader.addEventListener('loadend', () => {
             let storedItems =
@@ -54,7 +65,10 @@ const Main = () => {
           // const url = URL.createObjectURL(blob)
           // setAudioSource(url)
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+          setLoading(false)
+        })
     }
   }
 
@@ -77,6 +91,7 @@ const Main = () => {
         historyText={historyText}
         audioSource={audioSource}
         handleSubmit={handleSubmit}
+        isLoading={loading}
       />
     </main>
   )
