@@ -1,7 +1,8 @@
-/**@jx jsx */
+/**@jsx jsx */
 import {jsx} from '@emotion/react'
 
 import styled from '@emotion/styled/macro'
+import {keyframes} from '@emotion/react'
 import * as colors from 'styles/colors'
 import * as mq from 'styles/media-queries'
 import {
@@ -10,14 +11,28 @@ import {
   MenuItem as ReachMenuItem,
   MenuList as ReachMenuList,
 } from '@reach/menu-button'
+import {FaSpinner} from 'react-icons/fa'
+
+const spin = keyframes({
+  '0%': {transform: 'rotate(0deg)'},
+  '100%': {transform: 'rotate(360deg)'},
+})
+
+const Spinner = styled(FaSpinner)({
+  animation: `${spin} 1s linear infinite`,
+})
+Spinner.defaultProps = {
+  'aria-label': 'loading',
+}
 
 const Container = styled.div({
   display: 'flex',
   flexDirection: 'column',
   maxWidth: '876px',
+  width: '90%',
   margin: '0 auto',
-  [mq.small]: {
-    width: '96%',
+  [mq.mini]: {
+    width: '94%',
   },
 })
 
@@ -27,10 +42,31 @@ const Card = styled.div({
   borderRadius: '3px',
   transition: 'all 0.3s ease-in-out 0s',
   ':hover': {
+    color: colors.text,
     background: colors.base,
     boxShadow: '0 10px 25px -10px rgb(0 0 0 / 15%)',
   },
 })
+
+const liVariants = {
+  default: {},
+  selected: {
+    color: colors.text,
+    background: colors.base,
+    boxShadow: '0 10px 25px -10px rgb(0 0 0 / 15%)',
+    borderLeft: `3px solid ${colors.purple}`,
+  },
+}
+
+const Li = styled.li(
+  {
+    marginBottom: '0.4em',
+    ':last-child': {
+      marginBottom: 0,
+    },
+  },
+  ({variant = 'default'}) => liVariants[variant],
+)
 
 const Select = styled.select({
   border: `1px solid ${colors.gray20}`,
@@ -71,15 +107,17 @@ const TextArea = styled.textarea({
 
 const buttonVariants = {
   primary: {
-    background: colors.blue,
+    background: colors.purple,
     color: colors.base,
-    hoverBackground: colors.blueDarken10,
+    hoverBackground: colors.purpleDarken10,
+    disabledBackground: colors.lightPurple,
   },
   secondary: {
     background: colors.gray,
     color: colors.text,
   },
 }
+
 const Button = styled.button(
   {
     padding: '10px 15px',
@@ -87,6 +125,7 @@ const Button = styled.button(
     lineHeight: '1',
     borderRadius: '3px',
     letterSpacing: '1px',
+    transition: 'all 0.3s ease-in-out 0s',
   },
   ({variant = 'primary'}) => {
     return {
@@ -94,12 +133,16 @@ const Button = styled.button(
       ':hover': {
         background: buttonVariants[variant].hoverBackground,
       },
+      ':disabled': {
+        background: buttonVariants[variant].disabledBackground,
+      },
     }
   },
 )
 
 const Label = styled.label({
   marginBottom: '0.6em',
+  fontSize: '0.825rem',
 })
 
 const FormGroup = styled.div({
@@ -118,8 +161,10 @@ export {
   Card,
   Select,
   Option,
+  Li,
   TextArea,
   Button,
+  Spinner,
   Label,
   FormGroup,
   Menu,

@@ -5,19 +5,19 @@ import * as colors from 'styles/colors'
 
 const styles = {
   footer: {
-    // position: 'relative',
-    // bottom: '0',
-    // width: '100%',
+    position: 'relative',
+    bottom: '0',
+    marginTop: '2em',
     textAlign: 'center',
     fontSize: '0.8rem',
-    color: colors.gray80,
+    color: colors.text,
   },
 }
 
 const Footer = () => {
   return (
     <footer css={styles.footer}>
-      <p>Copyright 2021 by Mustafa. All Rights Reserved</p>
+      <small>Copyright 2021 by Mustafa. No Rights Reserved</small>
     </footer>
   )
 }

@@ -8,14 +8,15 @@ const styles = {
   banner: {
     display: 'flex',
     flexDirection: 'row',
-    margin: '3rem 0',
+    margin: '2rem 0',
+    alignItems: 'flex-start',
     div: {
-      margin: '10px 0 0 10px',
+      marginLeft: '10px',
     },
     h1: {
-      fontSize: '1.8rem',
+      fontSize: '1.4rem',
     },
-    h6: {
+    p: {
       color: colors.gray80,
     },
   },
@@ -28,7 +29,7 @@ const Header = () => {
         <img src={Logo} alt="App Logo" />
         <div>
           <h1>Watson Text to Speech Voices</h1>
-          <h6>Listen to voices across languages and dialects</h6>
+          <p>Listen to voices across languages and dialects</p>
         </div>
       </div>
     </header>

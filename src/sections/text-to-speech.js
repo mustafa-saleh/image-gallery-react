@@ -8,6 +8,7 @@ import {
   Button,
   Label,
   FormGroup,
+  Spinner,
 } from 'components/lib'
 import React from 'react'
 import DropDownMenu from 'components/drop-down-menu'
@@ -19,8 +20,14 @@ const styles = {
   textToSpeech: {
     display: 'flex',
     flexDirection: 'column',
+    background: colors.base,
+    padding: '1.2em',
+    border: `1px solid ${colors.gray10}`,
+    borderRadius: '3px',
+    boxShadow: '0 6px 2px -6px rgb(0 0 0 / 15%)',
     h3: {
-      color: colors.gray80,
+      color: colors.purple,
+      letterSpacing: '1px',
       fontSize: '1rem',
       marginBottom: '1.2em',
     },
@@ -52,7 +59,7 @@ const languages = [
   'Spanis',
 ]
 
-function TextToSpeechForm({onSubmit, buttonText, historyText}) {
+function TextToSpeechForm({onSubmit, buttonText, historyText, isLoading}) {
   const [text, setText] = React.useState('')
   const [error, setError] = React.useState(null)
 
@@ -95,9 +102,9 @@ function TextToSpeechForm({onSubmit, buttonText, historyText}) {
         </Label>
         <TextArea
           id="text"
-          cols="50"
+          cols="40"
           rows="5"
-          placeholder="Type some text here..."
+          placeholder="Type some english text here..."
           value={text}
           onChange={handleChange}
         ></TextArea>
@@ -107,12 +114,21 @@ function TextToSpeechForm({onSubmit, buttonText, historyText}) {
           </small>
         ) : null}
       </FormGroup>
-      <Button type="submit">{buttonText}</Button>
+      <Button type="submit" disabled={isLoading}>
+        {buttonText}
+      </Button>
+      {isLoading ? <Spinner css={{marginLeft: '.5em'}} /> : null}
     </form>
   )
 }
 
-const TextToSpeech = ({handleSubmit, audioSource, flag, historyText}) => {
+const TextToSpeech = ({
+  handleSubmit,
+  audioSource,
+  flag,
+  historyText,
+  isLoading,
+}) => {
   const audioRef = React.useRef()
   const [buttonText, setButtonText] = React.useState('PLAY')
 
@@ -137,21 +153,22 @@ const TextToSpeech = ({handleSubmit, audioSource, flag, historyText}) => {
         audioRef.current.pause()
         setButtonText('PLAY')
       }
-      return () => {
-        cleanUpRef.removeEventListner('ended', () => {
-          setButtonText('PLAY')
-        })
-      }
+      // return () => {
+      //   cleanUpRef.removeEventListner('ended', () => {
+      //     setButtonText('PLAY')
+      //   })
+      // }
     }
   }, [audioSource, flag])
 
   return (
-    <section css={styles.textToSpeech}>
+    <section id="speech-section" css={styles.textToSpeech}>
       <h3>TEXT TO SPEECH</h3>
       <TextToSpeechForm
         historyText={historyText}
         buttonText={buttonText}
         onSubmit={handleSubmit}
+        isLoading={isLoading}
       />
       <audio ref={audioRef}>
         <source src={audioSource} />
