@@ -1,9 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './app'
-import reportWebVitals from './reportWebVitals'
-import 'bootstrap/dist/css/bootstrap-reboot.css'
-import 'styles/global.css'
+import App from 'app'
+import reportWebVitals from 'reportWebVitals'
+import 'styles/main'
 
 ReactDOM.render(
   <React.StrictMode>
