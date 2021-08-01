@@ -1,7 +1,7 @@
 /**@jsx jsx */
 import {jsx} from '@emotion/react'
 
-import Cards from 'components/cards'
+import Card from 'components/card'
 import * as colors from 'styles/colors'
 
 const styles = {
@@ -13,25 +13,43 @@ const styles = {
       fontSize: '1rem',
     },
   },
+  cardList: {
+    color: colors.gray80,
+    fontSize: '0.9rem',
+    ul: {
+      margin: 0,
+      padding: 0,
+      listStyle: 'none',
+    },
+    li: {
+      marginBottom: '0.4em',
+      ':last-child': {
+        marginBottom: 0,
+      },
+    },
+  },
 }
 
-const items = [
-  {
-    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos maxime modi iusto cupiditate magnam quam ex adipisci, inventore cum quos ab. Officiis optio fugit veritatis autem tempore esse, cumque tempora.',
-  },
-  {
-    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos maxime modi iusto cupiditate magnam quam ex adipisci, inventore cum quos ab. Officiis optio fugit veritatis autem tempore esse, cumque tempora.',
-  },
-  {
-    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos maxime modi iusto cupiditate magnam quam ex adipisci, inventore cum quos ab. Officiis optio fugit veritatis autem tempore esse, cumque tempora.',
-  },
-]
+const History = ({items}) => {
+  const itemKeys = Object.keys(items)
 
-const History = () => {
   return (
     <section css={styles.history}>
       <h3>HISTORY</h3>
-      <Cards items={items} />
+      {/* <Cards items={itemKeys} /> */}
+      <div css={styles.cardList}>
+        {itemKeys ? (
+          <ul>
+            {itemKeys.map((item, index) => (
+              <li key={index}>
+                <Card item={item} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <pre>NO HISTORY ITEMS AVAIABLE FOR DISPLAY</pre>
+        )}
+      </div>
     </section>
   )
 }
