@@ -1,12 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from 'app'
+import {AuthProvider} from 'context/auth-context'
 import reportWebVitals from 'reportWebVitals'
 import 'styles/main'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 )
