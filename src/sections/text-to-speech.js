@@ -9,8 +9,15 @@ import {
   Label,
   FormGroup,
 } from 'components/lib'
+import React from 'react'
 import DropDownMenu from 'components/drop-down-menu'
+import * as auth from 'utils/auth-provider'
+import {client} from 'utils/api-client'
+import {useAuth} from 'context/auth-context'
 import * as colors from 'styles/colors'
+import theSrc from 'assets/hello_ibm.wav'
+
+const authToken = process.env.REACT_APP_AUTH_TOKEN
 
 const styles = {
   textToSpeech: {
@@ -43,8 +50,13 @@ const languages = [
 ]
 
 function TextToSpeechForm({onSubmit}) {
+  const [text, setText] = React.useState('')
+
   function handleSubmit(event) {
     event.preventDefault()
+
+    // validation
+    onSubmit(text)
   }
 
   return (
@@ -65,18 +77,49 @@ function TextToSpeechForm({onSubmit}) {
           cols="50"
           rows="7"
           placeholder="Type some text here"
+          value={text}
+          onChange={event => setText(event.target.value)}
         ></TextArea>
       </FormGroup>
-      <Button>PLAY</Button>
+      <Button type="submit">PLAY</Button>
     </form>
   )
 }
 
 const TextToSpeech = () => {
+  const [audioSource, setAudioSource] = React.useState(null)
+  const audioRef = React.useRef()
+
+  React.useEffect(() => {
+    if (audioSource)
+      if (audioRef.current) {
+        // audioRef.current.pause()
+        audioRef.current.load()
+        audioRef.current.play()
+      }
+  }, [audioSource])
+
+  function handleSubmit(text) {
+    client('synthesize', {
+      data: {text},
+      token: authToken,
+      headers: {Accept: 'audio/wav'},
+    })
+      .then(blob => {
+        const url = URL.createObjectURL(blob)
+        setAudioSource(url)
+      })
+      .catch(err => console.log(err))
+  }
+
   return (
     <section css={styles.textToSpeech}>
       <h3>TEXT TO SPEECH</h3>
-      <TextToSpeechForm />
+      <TextToSpeechForm onSubmit={handleSubmit} />
+      <audio ref={audioRef}>
+        <source src={audioSource} />
+        Your browser does not support the audio tag.
+      </audio>
     </section>
   )
 }
