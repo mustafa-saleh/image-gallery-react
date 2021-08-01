@@ -1,4 +1,5 @@
 export const base = 'white'
+export const error = 'red'
 export const blue = '#0F61FE'
 export const blueDarken10 = '#1f59c7'
 export const text = '#434449'

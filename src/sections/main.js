@@ -19,6 +19,7 @@ const styles = {
 
 const Main = () => {
   const [audioSource, setAudioSource] = React.useState(null)
+  const [historyText, setHistoryText] = React.useState('')
   const [flag, setFlag] = React.useState(false)
 
   function handleSubmit(text) {
@@ -57,16 +58,23 @@ const Main = () => {
     }
   }
 
+  function onHistoryItemSelect(selectedHistoryItem) {
+    const localValue = JSON.parse(window.localStorage.getItem(textToSpeechKey))
+    setAudioSource(localValue[selectedHistoryItem])
+    setHistoryText(selectedHistoryItem)
+  }
+
   const historyItems = React.useMemo(
-    () => JSON.parse(window.localStorage.getItem(textToSpeechKey)),
+    () => Object.keys(JSON.parse(window.localStorage.getItem(textToSpeechKey))),
     [audioSource],
   )
 
   return (
     <main css={styles.main}>
-      <History items={historyItems} />
+      <History onSelect={onHistoryItemSelect} items={historyItems} />
       <TextToSpeech
         flag={flag}
+        historyText={historyText}
         audioSource={audioSource}
         handleSubmit={handleSubmit}
       />

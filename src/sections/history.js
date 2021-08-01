@@ -30,22 +30,20 @@ const styles = {
   },
 }
 
-const History = ({items}) => {
-  const itemKeys = Object.keys(items)
-
+const History = ({items, onSelect}) => {
   return (
     <section css={styles.history}>
       <h3>HISTORY</h3>
       {/* <Cards items={itemKeys} /> */}
       <div css={styles.cardList}>
-        {itemKeys ? (
-          <ul>
-            {itemKeys.map((item, index) => (
-              <li key={index}>
+        {items ? (
+          <ol>
+            {items.map((item, index) => (
+              <li key={index} onClick={() => onSelect(item)}>
                 <Card item={item} />
               </li>
             ))}
-          </ul>
+          </ol>
         ) : (
           <pre>NO HISTORY ITEMS AVAIABLE FOR DISPLAY</pre>
         )}

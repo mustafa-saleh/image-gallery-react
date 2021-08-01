@@ -105,7 +105,7 @@ const Label = styled.label({
 const FormGroup = styled.div({
   display: 'flex',
   flexDirection: 'column',
-  marginBottom: '1.2em',
+  marginBottom: '.875em',
 })
 
 const Menu = styled(ReachMenu)({})
