@@ -1,16 +1,15 @@
-// import {queryCache} from 'react-query'
-import * as auth from 'utils/auth-provider'
 const apiURL = process.env.REACT_APP_API_URL
+const authorization = process.env.REACT_APP_AUTHORIZATION
 
 async function client(
   endpoint,
-  {data, token, headers: customHeaders, ...customConfig} = {},
+  {data, headers: customHeaders, ...customConfig} = {},
 ) {
   const config = {
     method: data ? 'POST' : 'GET',
     body: data ? JSON.stringify(data) : undefined,
     headers: {
-      Authorization: token ? `Basic ${token}` : undefined,
+      Authorization: `Basic ${authorization}`,
       'Content-Type': data ? 'application/json' : undefined,
       ...customHeaders,
     },
@@ -18,13 +17,6 @@ async function client(
   }
 
   return window.fetch(`${apiURL}/${endpoint}`, config).then(async response => {
-    if (response.status === 401) {
-      //   queryCache.clear()
-      // auth.removeLocalToken()
-      // refresh the page for them
-      // window.location.assign(window.location)
-      return Promise.reject({message: 'reauthenticate'})
-    }
     const data = await response.blob()
     if (response.ok) {
       return data

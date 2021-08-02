@@ -3,15 +3,9 @@ import {jsx} from '@emotion/react'
 
 import styled from '@emotion/styled/macro'
 import {keyframes} from '@emotion/react'
+import {FaSpinner} from 'react-icons/fa'
 import * as colors from 'styles/colors'
 import * as mq from 'styles/media-queries'
-import {
-  Menu as ReachMenu,
-  MenuButton as ReachMenuButton,
-  MenuItem as ReachMenuItem,
-  MenuList as ReachMenuList,
-} from '@reach/menu-button'
-import {FaSpinner} from 'react-icons/fa'
 
 const spin = keyframes({
   '0%': {transform: 'rotate(0deg)'},
@@ -151,10 +145,22 @@ const FormGroup = styled.div({
   marginBottom: '.875em',
 })
 
-const Menu = styled(ReachMenu)({})
-const MenuButton = styled(ReachMenuButton)({})
-const MenuItem = styled(ReachMenuItem)({})
-const MenuList = styled(ReachMenuList)({})
+function FullPageSpinner() {
+  return (
+    <div
+      css={{
+        fontSize: '4em',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Spinner />
+    </div>
+  )
+}
 
 export {
   Container,
@@ -163,12 +169,9 @@ export {
   Option,
   Li,
   TextArea,
+  FullPageSpinner,
   Button,
   Spinner,
   Label,
   FormGroup,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
 }

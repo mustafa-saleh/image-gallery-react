@@ -3,8 +3,8 @@ import {jsx} from '@emotion/react'
 
 import {Container} from 'components/lib'
 import Header from 'sections/header'
-import Main from 'sections/main'
 import Footer from 'sections/footer'
+import Main from 'sections/main'
 
 function App() {
   return (

@@ -2,7 +2,6 @@
 import {jsx} from '@emotion/react'
 
 import {Card} from 'components/lib'
-import * as colors from 'styles/colors'
 
 const styles = {
   card: {
@@ -14,7 +13,7 @@ const styles = {
   },
 }
 
-const Cards = ({item}) => {
+const CardItem = ({item}) => {
   return (
     <Card>
       <div css={styles.card}>
@@ -24,4 +23,4 @@ const Cards = ({item}) => {
   )
 }
 
-export default Cards
+export default CardItem

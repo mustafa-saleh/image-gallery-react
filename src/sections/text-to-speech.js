@@ -1,19 +1,8 @@
 /**@jsx jsx */
 import {jsx} from '@emotion/react'
 
-import {
-  Select,
-  Option,
-  TextArea,
-  Button,
-  Label,
-  FormGroup,
-  Spinner,
-} from 'components/lib'
 import React from 'react'
-import DropDownMenu from 'components/drop-down-menu'
-import * as auth from 'utils/auth-provider'
-import {useAuth} from 'context/auth-context'
+import {TextArea, Button, Label, FormGroup, Spinner} from 'components/lib'
 import * as colors from 'styles/colors'
 
 const styles = {
@@ -36,7 +25,7 @@ const styles = {
     color: colors.text,
     fontSize: '0.95rem',
     small: {
-      color: colors.error,
+      color: colors.danger,
       paddingTop: '1em',
     },
     pre: {
@@ -45,76 +34,63 @@ const styles = {
   },
 }
 
-const languages = [
-  'English',
-  'Arabic',
-  'Brazilian',
-  'Chinese',
-  'Dutch',
-  'French',
-  'Germa',
-  'Italia',
-  'Japanes',
-  'Korea',
-  'Spanis',
-]
+const validation = {
+  maxLengthExceede: 'Maximum text length allowed is 50 characters',
+  requiredField: 'Please, enter some text to convert to speech',
+}
 
-function TextToSpeechForm({onSubmit, buttonText, historyText, isLoading}) {
-  const [text, setText] = React.useState('')
-  const [error, setError] = React.useState(null)
+function TextToSpeechForm({
+  onSubmit,
+  buttonText,
+  historyText,
+  isLoading,
+  apiError,
+  resetApiError,
+}) {
+  const [state, setState] = React.useState({text: ''})
 
   React.useEffect(() => {
-    if (historyText) setText(historyText)
+    if (historyText) setState({...state, text: historyText})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [historyText])
 
   function handleChange(event) {
-    const value = event.target.value
-    if (error) {
-      setError(null)
-    }
-
-    value.length > 50
-      ? setError({message: 'Maximum text length allowed is 50 characters'})
-      : setText(event.target.value)
+    const targetValue = event.target.value
+    if (state.error) setState({text: state.text})
+    if (apiError) resetApiError()
+    if (targetValue.length > 50)
+      setState({...state, error: validation.maxLengthExceede})
+    else setState({text: targetValue})
   }
 
   function handleSubmit(event) {
     event.preventDefault()
-    if (!text.length)
-      setError({message: 'Please, enter some text to convert to speech'})
-    else onSubmit(text.trim().toLowerCase())
+    if (!state.text.length)
+      setState({...state, error: validation.requiredField})
+    else onSubmit(state.text.trim().toLowerCase())
   }
 
   return (
     <form css={styles.form} onSubmit={handleSubmit}>
-      {/* <FormGroup>
-        <Label htmlFor="language">Language</Label>
-        <Select id="language">
-          {languages.map((language, index) => (
-            <Option value={language}>{language}</Option>
-          ))}
-        </Select>
-        <DropDownMenu options={languages} />
-      </FormGroup> */}
       <FormGroup>
-        <Label htmlFor="text">
+        <Label htmlFor="speech-text">
           Use the sample text or enter your own text in English
         </Label>
         <TextArea
-          id="text"
           cols="40"
           rows="5"
+          id="speech-text"
           placeholder="Type some english text here..."
-          value={text}
+          value={state.text}
           onChange={handleChange}
         ></TextArea>
-        {error ? (
+        {state.error || apiError ? (
           <small>
-            <pre>{error.message}</pre>
+            <pre>{state.error || apiError.message}</pre>
           </small>
         ) : null}
       </FormGroup>
-      <Button type="submit" disabled={isLoading}>
+      <Button type="submit" disabled={isLoading || state.error || apiError}>
         {buttonText}
       </Button>
       {isLoading ? <Spinner css={{marginLeft: '.5em'}} /> : null}
@@ -128,47 +104,61 @@ const TextToSpeech = ({
   flag,
   historyText,
   isLoading,
+  apiError,
+  resetApiError,
 }) => {
   const audioRef = React.useRef()
   const [buttonText, setButtonText] = React.useState('PLAY')
+  const audioSourceRef = React.useRef(audioSource)
 
   React.useEffect(() => {
-    const cleanUpRef = audioRef.current
-    if (audioSource && audioRef.current) {
+    const audioPlayer = audioRef.current
+    if (
+      audioSource &&
+      audioSourceRef &&
+      audioSourceRef.current !== audioSource
+    ) {
+      // new audio source
+      audioSourceRef.current = audioSource
+      audioPlayer.pause()
+      audioPlayer.load()
+      audioPlayer.play()
+      setButtonText('PAUSE')
+    } else if (audioSource && audioPlayer) {
+      // resume
       if (
-        audioRef.current.paused &&
-        audioRef.current.currentTime > 0 &&
-        !audioRef.current.ended
+        audioPlayer.paused &&
+        audioPlayer.currentTime > 0 &&
+        !audioPlayer.ended
       ) {
         audioRef.current.play()
-      } else if (audioRef.current.paused) {
-        console.log('paused')
-        audioRef.current.load()
-        audioRef.current.play()
         setButtonText('PAUSE')
-        audioRef.current.addEventListener('ended', () => {
-          setButtonText('PLAY')
-        })
-      } else {
-        audioRef.current.pause()
+      }
+      // start
+      else if (audioRef.current.paused) {
+        audioPlayer.load()
+        audioPlayer.play()
+        audioPlayer.addEventListener('ended', () => setButtonText('PLAY'))
+        setButtonText('PAUSE')
+      }
+      // pause
+      else {
+        audioPlayer.pause()
         setButtonText('PLAY')
       }
-      // return () => {
-      //   cleanUpRef.removeEventListner('ended', () => {
-      //     setButtonText('PLAY')
-      //   })
-      // }
     }
   }, [audioSource, flag])
 
   return (
-    <section id="speech-section" css={styles.textToSpeech}>
+    <section css={styles.textToSpeech}>
       <h3>TEXT TO SPEECH</h3>
       <TextToSpeechForm
         historyText={historyText}
         buttonText={buttonText}
         onSubmit={handleSubmit}
         isLoading={isLoading}
+        apiError={apiError}
+        resetApiError={resetApiError}
       />
       <audio ref={audioRef}>
         <source src={audioSource} />
