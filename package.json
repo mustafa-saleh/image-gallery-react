@@ -23,7 +23,7 @@
     "prettier": "prettier \"**/*.+(js|json|css|md|mdx|html)\"",
     "format": "npm run prettier -- --write",
     "check-format": "npm run prettier -- --list-different",
-    "validate": "npm-run-all --parallel check-format lint test build",
+    "validate": "npm-run-all --parallel check-format lint build",
     "prepare": "husky install"
   },
   "eslintConfig": {
