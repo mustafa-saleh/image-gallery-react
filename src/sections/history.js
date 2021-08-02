@@ -11,7 +11,6 @@ const styles = {
   history: {
     display: 'flex',
     flexDirection: 'column',
-    // paddingTop: '1.2em',
     h3: {
       color: colors.text,
       letterSpacing: '1px',
@@ -41,6 +40,24 @@ const styles = {
   },
 }
 
+const RenderHistoryItems = ({items, selected, handleSelect}) => {
+  if (items && items.length)
+    return (
+      <ul>
+        {items.map((item, index) => (
+          <Li
+            key={index}
+            variant={index === selected ? 'selected' : 'default'}
+            onClick={() => handleSelect(index, item)}
+          >
+            <Card item={capitalize(item)} />
+          </Li>
+        ))}
+      </ul>
+    )
+  else return <pre>NO HISTORY ITEMS AVAIABLE FOR DISPLAY</pre>
+}
+
 const History = ({items, onSelect}) => {
   const [selected, setSelected] = React.useState(-1)
 
@@ -52,23 +69,12 @@ const History = ({items, onSelect}) => {
   return (
     <section id="history-section" css={styles.history}>
       <h3>FETCH HISTORY</h3>
-      {/* <Cards items={itemKeys} /> */}
       <div css={styles.cardList}>
-        {items ? (
-          <ul>
-            {items.map((item, index) => (
-              <Li
-                variant={index === selected ? 'selected' : 'default'}
-                key={index}
-                onClick={() => handleSelect(index, item)}
-              >
-                <Card item={capitalize(item)} />
-              </Li>
-            ))}
-          </ul>
-        ) : (
-          <pre>NO HISTORY ITEMS AVAIABLE FOR DISPLAY</pre>
-        )}
+        <RenderHistoryItems
+          items={items}
+          selected={selected}
+          handleSelect={handleSelect}
+        />
       </div>
     </section>
   )
