@@ -7,7 +7,6 @@
     "@emotion/styled": "^11.3.0",
     "@reach/menu-button": "^0.15.3",
     "@reach/slider": "^0.15.3",
-    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "bootstrap": "^5.0.2",
@@ -27,7 +26,7 @@
     "prettier": "prettier \"**/*.+(js|json|css|md|mdx|html)\"",
     "format": "npm run prettier -- --write",
     "check-format": "npm run prettier -- --list-different",
-    "validate": "npm-run-all --parallel check-format lint build",
+    "validate": "npm-run-all --parallel check-format lint test build",
     "prepare": "husky install"
   },
   "eslintConfig": {
@@ -49,7 +48,10 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "faker": "^5.5.3",
     "husky": "^7.0.1",
+    "msw": "^0.33.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2"
   }

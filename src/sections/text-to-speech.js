@@ -82,7 +82,7 @@ function TextToSpeechForm({onSubmit, buttonText, historyText, isLoading}) {
     event.preventDefault()
     if (!text.length)
       setError({message: 'Please, enter some text to convert to speech'})
-    onSubmit(text.trim().toLowerCase())
+    else onSubmit(text.trim().toLowerCase())
   }
 
   return (
@@ -178,4 +178,4 @@ const TextToSpeech = ({
   )
 }
 
-export default TextToSpeech
+export {TextToSpeech, TextToSpeechForm}

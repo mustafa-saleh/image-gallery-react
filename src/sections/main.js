@@ -3,7 +3,7 @@ import {jsx} from '@emotion/react'
 
 import React from 'react'
 import History from 'sections/history'
-import TextToSpeech from 'sections/text-to-speech'
+import {TextToSpeech} from 'sections/text-to-speech'
 import {client} from 'utils/api-client'
 import * as mq from 'styles/media-queries'
 
