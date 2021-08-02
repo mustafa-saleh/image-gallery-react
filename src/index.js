@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from 'app'
+import App from 'App'
 import {FullPageSpinner} from 'components/lib'
 import 'styles/main'
 
