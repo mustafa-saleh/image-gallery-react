@@ -1,10 +1,12 @@
 {
-  "name": "text-to-speech",
+  "name": "image-gallery",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
+    "@reach/dialog": "^0.16.0",
+    "@reach/visually-hidden": "^0.16.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "bootstrap": "^5.0.2",

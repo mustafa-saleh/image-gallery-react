@@ -1,18 +1,19 @@
 /**@jsx jsx */
 import {jsx} from '@emotion/react'
 
-import {Container} from 'components/lib'
-import Header from 'sections/header'
-import Footer from 'sections/footer'
-import Main from 'sections/main'
+import React from 'react'
+import {useAuth} from 'context/auth-context'
+import {FullSpinner} from 'components/lib'
+
+const AuthenticatedApp = React.lazy(() => import('./authenticated-app'))
+const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 
 function App() {
+  const {token} = useAuth()
   return (
-    <Container>
-      <Header />
-      <Main />
-      <Footer />
-    </Container>
+    <React.Suspense fallback={<FullSpinner />}>
+      {token ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+    </React.Suspense>
   )
 }
 

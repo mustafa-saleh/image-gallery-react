@@ -1,12 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from 'App'
-import {FullPageSpinner} from 'components/lib'
+import {AuthProvider} from 'context/auth-context'
 import 'styles/main'
 
 ReactDOM.render(
-  <React.Suspense fallback={<FullPageSpinner />}>
+  <AuthProvider>
     <App />
-  </React.Suspense>,
+  </AuthProvider>,
   document.getElementById('root'),
 )
